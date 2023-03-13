@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.community.kcl.service.dao.DB1DAO">
+
+<select id="getBoardList" resultType="DB1VO">
+		<![CDATA[
+		SELECT 
+			b.bno,
+			b.title,
+			b.writer,
+			b.reg_date regDate,
+			b.cnt,
+			b.file_name fileName
+		FROM (
+			SELECT rownum as rno, bno,title,writer,reg_date,cnt,file_name
+			FROM boardtest
+			ORDER BY bno DESC
+		) b
+		WHERE b.rno >= #{startNo}
+		AND b.rno <= #{endNo}
+		ORDER BY b.bno DESC
+		]]>
+	</select>
+
+    <select id="countBoardList" resultType="int">
+		<![CDATA[
+		SELECT 
+			count(bno)
+		FROM 
+			boardtest
+		]]>
+	</select>
+	
+	<select id="getContent" resultType="DB1VO">
+		<![CDATA[
+		SELECT bno,title,writer,reg_date regDate,cnt,file_name fileName, content 
+			FROM boardtest
+			WHERE bno = #{bno}
+		]]><!-- ![CDATA[ ... ]]안에 들어가는건 파싱을 막아준다 -->
+	</select>
+	
+	<select id="insertBoard">
+		<![CDATA[
+		INSERT INTO boardtest(bno, title,writer,content,reg_date,file_name)
+		VALUES(seq_boardtest.NEXTVAL, #{title}, #{writer}, #{content}, SYSDATE, #{fileName}) 
+		]]>
+	</select>
+	
+	<update id="updateBoard">
+		<![CDATA[
+		UPDATE boardtest SET
+		title = #{title},
+		content = #{content}
+		WHERE bno = #{bno}
+		]]><!-- ![CDATA[ ... ]]안에 들어가는건 파싱을 막아준다 -->
+	</update>
+
+	<delete id="deleteBoard">
+		<![CDATA[
+		DELETE FROM boardtest
+		WHERE bno = #{bno}
+		]]><!-- ![CDATA[ ... ]]안에 들어가는건 파싱을 막아준다 -->
+	</delete>
+
+</mapper>

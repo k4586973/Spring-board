@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.community.kcl.service.dao.UserDAO">
+
+	<select id="getAllUser" resultType="UserVO">
+		SELECT *
+		FROM user1
+		ORDER BY uno
+	</select>
+
+	<select id="getUserById" resultType="UserVO" parameterType="String">
+		SELECT *
+		FROM user1
+		where id = #{id}
+	</select><!-- 추가해주자 세션에서 닉가져와야대니까 -->
+	
+	<insert id="userJoin">
+		INSERT INTO user1
+		VALUES (seq_user1.NEXTVAL, #{id}, #{pw}, #{name}, #{birth}, #{tel})
+	</insert>
+	
+	<select id="userLogin" parameterType="String" resultType="UserVO">
+		SELECT *
+		FROM user1
+		WHERE id = #{id} AND pw = #{pw}
+	</select>
+	
+	<delete id="userDelete">
+		DELETE FROM user1
+		WHERE id = #{id}
+	</delete>
+	
+	<update id="userUpdate">
+		UPDATE user1
+	 	SET pw = #{pw}, name = #{name}, birth = #{birth}, tel = #{tel} 
+	 	WHERE id = #{id}
+	</update>
+
+</mapper>
